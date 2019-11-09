@@ -1,4 +1,4 @@
-<?php 
+<?php
 namespace Favorites;
 
 use Favorites\Config\SettingsRepository;
@@ -6,7 +6,7 @@ use Favorites\Config\SettingsRepository;
 /**
 * Plugin Bootstrap
 */
-class Bootstrap 
+class Bootstrap
 {
 	/**
 	* Settings Repository
@@ -17,10 +17,16 @@ class Bootstrap
 	public function __construct()
 	{
 		$this->settings_repo = new SettingsRepository;
+		add_action( 'rest_api_init', [ $this, 'initRestApi' ] );
 		add_action( 'init', [$this, 'init']);
 		add_action( 'admin_init', [$this, 'adminInit']);
 		add_filter( 'plugin_action_links_' . 'favorites/favorites.php', [$this, 'settingsLink']);
 		add_action( 'plugins_loaded', [$this, 'addLocalization']);
+	}
+
+	public function initRestApi() {
+		$controller = new API\Endpoints;
+		$controller->register_rest_routes();
 	}
 
 	/**
@@ -35,7 +41,7 @@ class Bootstrap
 		new Events\RegisterPublicEvents;
 		new Entities\Post\PostMeta;
 		new API\Shortcodes\ButtonShortcode;
-		new API\Shortcodes\FavoriteCountShortcode;
+ 		new API\Shortcodes\FavoriteCountShortcode;
 		new API\Shortcodes\UserFavoritesShortcode;
 		new API\Shortcodes\UserFavoriteCount;
 		new API\Shortcodes\PostFavoritesShortcode;
@@ -55,12 +61,12 @@ class Bootstrap
 	* Add a link to the settings on the plugin page
 	*/
 	public function settingsLink($links)
-	{ 
-		$settings_link = '<a href="options-general.php?page=simple-favorites">' . __('Settings', 'favorites') . '</a>'; 
-		$help_link = '<a href="http://favoriteposts.com">' . __('FAQ', 'favorites') . '</a>'; 
-		array_unshift($links, $help_link); 
+	{
+		$settings_link = '<a href="options-general.php?page=simple-favorites">' . __('Settings', 'favorites') . '</a>';
+		$help_link = '<a href="http://favoriteposts.com">' . __('FAQ', 'favorites') . '</a>';
+		array_unshift($links, $help_link);
 		array_unshift($links, $settings_link);
-		return $links; 
+		return $links;
 	}
 
 	/**
@@ -69,8 +75,8 @@ class Bootstrap
 	public function addLocalization()
 	{
 		load_plugin_textdomain(
-			'favorites', 
-			false, 
+			'favorites',
+			false,
 			dirname( dirname( plugin_basename( __FILE__ ) ) ) . '/languages' );
 	}
 

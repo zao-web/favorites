@@ -1,4 +1,4 @@
-<?php 
+<?php
 namespace Favorites\Activation;
 
 use Favorites\Helpers;
@@ -7,7 +7,7 @@ use Favorites\Config\SettingsRepository;
 /**
 * Plugin Dependencies
 */
-class Dependencies 
+class Dependencies
 {
 	/**
 	* Plugin Directory
@@ -51,9 +51,9 @@ class Dependencies
 	{
 		wp_enqueue_style('wp-color-picker');
 		wp_enqueue_style(
-			'simple-favorites-admin', 
-			$this->plugin_dir . '/assets/css/favorites-admin.css', 
-			[], 
+			'simple-favorites-admin',
+			$this->plugin_dir . '/assets/css/favorites-admin.css',
+			[],
 			$this->plugin_version
 		);
 	}
@@ -67,9 +67,9 @@ class Dependencies
 		$settings_page = ( strpos($screen->id, 'simple-favorites') ) ? true : false;
 		if ( !$settings_page ) return;
 		wp_enqueue_script(
-			'simple-favorites-admin', 
-			$this->plugin_dir . '/assets/js/favorites-admin.min.js', 
-			['jquery', 'wp-color-picker'], 
+			'simple-favorites-admin',
+			$this->plugin_dir . '/assets/js/favorites-admin.min.js',
+			['jquery', 'wp-color-picker'],
 			$this->plugin_version
 		);
 	}
@@ -81,9 +81,9 @@ class Dependencies
 	{
 		if ( !$this->settings_repo->outputDependency('css') ) return;
 		wp_enqueue_style(
-			'simple-favorites', 
-			$this->plugin_dir . '/assets/css/favorites.css', 
-			[], 
+			'simple-favorites',
+			$this->plugin_dir . '/assets/css/favorites.css',
+			[],
 			$this->plugin_version
 		);
 	}
@@ -96,13 +96,16 @@ class Dependencies
 		if ( !$this->settings_repo->outputDependency('js') ) return;
 		$file = ( $this->settings_repo->devMode() ) ? 'favorites.js' : 'favorites.min.js';
 		wp_enqueue_script(
-			'favorites', 
-			$this->plugin_dir . '/assets/js/' . $file, 
-			['jquery'], 
+			'favorites',
+			$this->plugin_dir . '/assets/js/' . $file,
+			['jquery'],
 			$this->plugin_version
 		);
 		$localized_data = [
 			'ajaxurl' => admin_url( 'admin-ajax.php' ),
+			'resturl' => rest_url( 'favorites/v2/' ),
+			'currentServerLoad' => function_exists( 'sys_getloadavg' ) ? max( sys_getloadavg() ) : false,
+			'maybeGetUserFavorites' => apply_filters( 'favorites/maybe_get_user_favorites', ( is_user_logged_in() && is_single() ) || has_shortcode( get_post()->post_content, 'user_favorites' ), $this ),
 			'nonce' => wp_create_nonce('simple_favorites_nonce'),
 			'favorite' => apply_filters('favorites/button/html', $this->settings_repo->buttonText(), null, false, null),
 			'favorited' => apply_filters('favorites/button/html', $this->settings_repo->buttonTextFavorited(), null, true, null),

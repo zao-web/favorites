@@ -23,6 +23,10 @@ Favorites.UserFavorites = function()
 	*/
 	plugin.getFavorites = function()
 	{
+		if ( ! Favorites.jsData.maybeGetUserFavorites ) {
+			return;
+		}
+
 		$.ajax({
 			url: Favorites.jsData.ajaxurl,
 			type: 'POST',
