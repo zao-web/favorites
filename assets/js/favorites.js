@@ -228,6 +228,10 @@ Favorites.UserFavorites = function()
 	*/
 	plugin.getFavorites = function()
 	{
+		if ( ! Favorites.jsData.maybeGetUserFavorites ) {
+			return;
+		}
+
 		$.ajax({
 			url: Favorites.jsData.ajaxurl,
 			type: 'POST',
@@ -1073,7 +1077,7 @@ Favorites.selectors = {
 	modals : 'data-favorites-modal', // Modals
 	consentModal : 'data-favorites-consent-modal', // Consent Modal
 	close_modals : 'data-favorites-modal-close', // Link/Button to close the modals
-	count : '.simplefavorite-button-count', // The count inside the favorites button 
+	count : '.simplefavorite-button-count', // The count inside the favorites button
 	post_favorite_count : 'data-favorites-post-count-id' // The total number of times a post has been favorited
 }
 
@@ -1090,6 +1094,8 @@ Favorites.cssClasses = {
 */
 Favorites.jsData = {
 	ajaxurl : favorites_data.ajaxurl, // The WP AJAX URL
+	restUrl : favorites_data.rest_url, // The WP REST URL
+	maybeGetUserFavorites : favorites_data.maybeGetUserFavorites,
 	favorite : favorites_data.favorite, // Active Button Text/HTML
 	favorited : favorites_data.favorited, // Inactive Button Text
 	include_count : favorites_data.includecount, // Whether to include the count in buttons
