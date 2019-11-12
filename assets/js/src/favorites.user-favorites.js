@@ -27,13 +27,12 @@ Favorites.UserFavorites = function()
 			return;
 		}
 
-		$.ajax({
-			url: Favorites.jsData.ajaxurl,
-			type: 'POST',
+		// First check localStorage for locally cached version of favorites
+
+		$.get({
+			url: Favorites.jsData.api_endpoints.user_favorites,
 			datatype: 'json',
-			data: {
-				action : Favorites.formActions.favoritesarray
-			},
+
 			success: function(data){
 				if ( Favorites.jsData.dev_mode ) {
 					console.log('The current user favorites were successfully loaded.');

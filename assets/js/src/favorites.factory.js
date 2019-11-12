@@ -68,6 +68,12 @@ Favorites.jsData = {
 	dev_mode : favorites_data.dev_mode, // Is Dev mode enabled
 	logged_in : favorites_data.logged_in, // Is the user logged in
 	user_id : favorites_data.user_id // The current user ID (0 if logged out)
+};
+
+Favorites.jsData.api_endpoints = {
+	nonce : Favorites.jsData.restUrl + '/generate-nonce',
+	user_favorites : Favorites.jsData.restUrl + '/user-favorites',
+	favorite_button : Favorites.jsData.restUrl + '/favorite-button'
 }
 
 /**

@@ -26,7 +26,7 @@ class Bootstrap
 
 	public function initRestApi() {
 		$controller = new API\Endpoints;
-		$controller->register_rest_routes();
+		$controller->register_routes();
 	}
 
 	/**

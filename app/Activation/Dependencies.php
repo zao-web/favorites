@@ -101,9 +101,13 @@ class Dependencies
 			['jquery'],
 			$this->plugin_version
 		);
+
+		$redirect_url = $this->settings_repo->redirectAnonymousId();
+
 		$localized_data = [
 			'ajaxurl' => admin_url( 'admin-ajax.php' ),
-			'resturl' => rest_url( 'favorites/v2/' ),
+			'restUrl' => rest_url( 'favorites/v2/' ),
+			'restNonce' => wp_create_nonce( 'wp_rest' ),
 			'currentServerLoad' => function_exists( 'sys_getloadavg' ) ? max( sys_getloadavg() ) : false,
 			'maybeGetUserFavorites' => apply_filters( 'favorites/maybe_get_user_favorites', ( is_user_logged_in() && is_single() ) || has_shortcode( get_post()->post_content, 'user_favorites' ), $this ),
 			'nonce' => wp_create_nonce('simple_favorites_nonce'),
@@ -121,14 +125,14 @@ class Dependencies
 			'authentication_redirect' => $this->settings_repo->redirectAnonymous(),
 			'dev_mode' => $this->settings_repo->devMode(),
 			'logged_in' => is_user_logged_in(),
-			'user_id' => get_current_user_id()
+			'user_id'                     => get_current_user_id(),
+			'authentication_redirect_url' => ( $redirect_url ) ? get_the_permalink($redirect_url) : apply_filters( 'favorites/authentication_redirect_url', wp_login_url() )
 		];
-		$redirect_url = $this->settings_repo->redirectAnonymousId();
-		$localized_data['authentication_redirect_url'] = ( $redirect_url ) ? get_the_permalink($redirect_url) : apply_filters( 'favorites/authentication_redirect_url', wp_login_url() );
+
 		wp_localize_script(
 			'favorites',
 			'favorites_data',
-			$localized_data
+			apply_filters( 'favorites/data', $localized_data, $this )
 		);
 	}
 }

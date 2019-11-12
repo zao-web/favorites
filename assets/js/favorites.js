@@ -232,13 +232,12 @@ Favorites.UserFavorites = function()
 			return;
 		}
 
-		$.ajax({
-			url: Favorites.jsData.ajaxurl,
-			type: 'POST',
+		// First check localStorage for locally cached version of favorites
+
+		$.get({
+			url: Favorites.jsData.api_endpoints.user_favorites,
 			datatype: 'json',
-			data: {
-				action : Favorites.formActions.favoritesarray
-			},
+
 			success: function(data){
 				if ( Favorites.jsData.dev_mode ) {
 					console.log('The current user favorites were successfully loaded.');
@@ -557,15 +556,15 @@ Favorites.Button = function()
 		plugin.loading(true);
 		plugin.setData();
 		var formData = {
-			action : Favorites.formActions.favorite,
-			postid : plugin.data.post_id,
 			siteid : plugin.data.site_id,
-			status : plugin.data.status,
 			user_consent_accepted : plugin.data.user_consent_accepted
 		}
+
+		var type = 'active' === plugin.data.status ? 'POST' : 'DELETE';
+
 		$.ajax({
-			url: Favorites.jsData.ajaxurl,
-			type: 'post',
+			url: Favorites.jsData.api_endpoints.user_favorites + '/' + plugin.data.post_id,
+			type: type,
 			dataType: 'json',
 			data: formData,
 			success: function(data){
@@ -617,7 +616,7 @@ Favorites.Button = function()
 				$(this).attr('data-favoritecount', favorite_count - 1);
 				$(this).find(Favorites.selectors.count).text(favorite_count - 1);
 				return;
-			} 
+			}
 			$(this).addClass(Favorites.cssClasses.active);
 			$(this).attr('data-favoritecount', favorite_count + 1);
 			$(this).find(Favorites.selectors.count).text(favorite_count + 1);
@@ -1111,6 +1110,12 @@ Favorites.jsData = {
 	dev_mode : favorites_data.dev_mode, // Is Dev mode enabled
 	logged_in : favorites_data.logged_in, // Is the user logged in
 	user_id : favorites_data.user_id // The current user ID (0 if logged out)
+};
+
+Favorites.jsData.api_endpoints = {
+	nonce : Favorites.jsData.restUrl + '/generate-nonce',
+	user_favorites : Favorites.jsData.restUrl + '/user-favorites',
+	favorite_button : Favorites.jsData.restUrl + '/favorite-button'
 }
 
 /**

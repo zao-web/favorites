@@ -58,15 +58,15 @@ Favorites.Button = function()
 		plugin.loading(true);
 		plugin.setData();
 		var formData = {
-			action : Favorites.formActions.favorite,
-			postid : plugin.data.post_id,
 			siteid : plugin.data.site_id,
-			status : plugin.data.status,
 			user_consent_accepted : plugin.data.user_consent_accepted
 		}
+
+		var type = 'active' === plugin.data.status ? 'POST' : 'DELETE';
+
 		$.ajax({
-			url: Favorites.jsData.ajaxurl,
-			type: 'post',
+			url: Favorites.jsData.api_endpoints.user_favorites + '/' + plugin.data.post_id,
+			type: type,
 			dataType: 'json',
 			data: formData,
 			success: function(data){
@@ -118,7 +118,7 @@ Favorites.Button = function()
 				$(this).attr('data-favoritecount', favorite_count - 1);
 				$(this).find(Favorites.selectors.count).text(favorite_count - 1);
 				return;
-			} 
+			}
 			$(this).addClass(Favorites.cssClasses.active);
 			$(this).attr('data-favoritecount', favorite_count + 1);
 			$(this).find(Favorites.selectors.count).text(favorite_count + 1);
