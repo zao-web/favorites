@@ -1,0 +1,102 @@
+//
+// Lists
+// --------------------------------------------------
+.favorites-list {
+	list-style: none;
+	li {
+		@include clearfix;
+		border-top: 1px solid rgba(0,0,0,.2);
+		padding: .75em 0;
+		margin: 0;
+		img {
+			float: left;
+			margin-right: 1em;
+		}
+	}
+}
+
+.loading-favorite {
+	width: 130px;
+	height: 158px;
+	padding: 10px 10px 10px;
+	margin-bottom: 10px;
+	color: #141823;
+	background: #fff;
+	float: left;
+	margin: 16px 8px;
+	border-radius: 3px;
+  }
+
+  .favorite--is-loading {
+
+	.favorite__loader {
+	  display: block;
+	  overflow: hidden;
+	}
+  }
+
+  .favorite__loader {
+	display: none;
+	position: relative;
+	height: 160px;
+	background: #f6f7f8;
+	background-image: -webkit-gradient( linear, left center, right center, from(#f6f7f8), color-stop(.2, #edeef1), color-stop(.4, #f6f7f8), to(#f6f7f8));
+	background-image: -webkit-linear-gradient( left, #f6f7f8 0%, #edeef1 20%, #f6f7f8 40%, #f6f7f8 100%);
+	background-repeat: no-repeat;
+	background-size: 800px 104px;
+	-webkit-animation-duration: 1s;
+	-webkit-animation-fill-mode: forwards;
+	-webkit-animation-iteration-count: infinite;
+	-webkit-animation-name: placeHolderShimmer;
+	-webkit-animation-timing-function: linear;
+	> * {
+	  position: absolute;
+	  background: #fff;
+	  height: 6px;
+	  left: 0;
+	  right: 0;
+	}
+  }
+
+  .loader__bar--1 {
+	height: 13px;
+	top: 105px;
+  }
+
+  .loader__bar--2 {
+	height: 13px;
+	top: 132px;
+  }
+  .loader__bar--3 {
+	height: 13px;
+	top: 159px;
+  }
+
+  @-webkit-keyframes placeHolderShimmer {
+	0% {
+	  background-position: -468px 0
+	}
+	100% {
+	  background-position: 468px 0
+	}
+  }
+
+// TODO THIS IS THEME SPECIFIC< bAD
+div#wp-user-favorites .list {
+	grid-row-gap: 20px;
+	display: grid;
+	grid-column-gap: 20px;
+	grid-template-columns: repeat(4, 1fr);
+}
+
+div#wp-user-favorites .list article {
+	width: 100%;
+}
+
+@media (max-width: 600px) {
+	div#wp-user-favorites .list {
+		grid-row-gap: 10px;
+		grid-column-gap: 10px;
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
